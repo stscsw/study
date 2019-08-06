@@ -35,10 +35,11 @@ public class ChikenStore {
         count++;
         System.out.println(Thread.currentThread().getName() + "产生了第" + count + "个烤鸡，赶紧开始卖");
         isHaveChicken = true;
-        consumeCondition.signal();
+        consumeCondition.signal();//指定唤醒消费者
         reentrantLock.unlock();
     }
 
+    //消费
     public void SellChicken() {
         reentrantLock.lock();
         while (!isHaveChicken) {
@@ -52,7 +53,7 @@ public class ChikenStore {
         count--;
         isHaveChicken = false;
         System.out.println(Thread.currentThread().getName() + "卖掉了第" + count + 1 + "个烤鸡，赶紧开始生产");
-        productCondition.signal();
+        productCondition.signal();//指定唤醒生产者
         reentrantLock.unlock();
     }
 

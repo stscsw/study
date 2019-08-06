@@ -25,7 +25,7 @@ public class ChickenStoreSync {
         count++;
         System.out.println(Thread.currentThread().getName() + "产生了第" + count + "个烤鸡，赶紧开始卖");
         isHaveChicken = true;
-        notifyAll();
+        notifyAll();//唤醒全部  三个 若使用notify唤醒的是生产者则四个线程都在等待唤醒了
     }
 
     public synchronized void SellChicken() {
@@ -40,7 +40,7 @@ public class ChickenStoreSync {
         count--;
         isHaveChicken = false;
         System.out.println(Thread.currentThread().getName() + "卖掉了第" + count + 1 + "个烤鸡，赶紧开始生产");
-        notifyAll();
+        notifyAll();//唤醒全部  三个 若使用notify唤醒的是消费者则四个线程都在等待唤醒了
     }
 
     public static void main(String[] args) {

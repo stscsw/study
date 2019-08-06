@@ -1,0 +1,23 @@
+要不要有锁
+悲观锁 偏向锁
+乐光锁 无锁
+获取锁失败了是否要自旋
+自旋锁     轻量级锁
+非自旋锁   重量级锁
+获取锁是否要按照顺序
+公平锁
+非公平锁
+一个线程是否可以多次获取锁
+可重入锁
+不可重入锁
+多个线程是否能拥有一把锁
+共享锁
+排它锁
+
+AbstractQueuedSynchronizer  unSupportOperationException  Node(waitStatus,pre,next,Thread,nextWait)  模板设计模式
+基础并发组件  构建同步队列和控制同步状态
+waitStatus 1 CANCELLED 0 初始化 -1 SIGNAL -2 CONDITION -3 PROPAGATE
+ReentrantLock Sync  FairSync  NonFairSync
+semaphore
+ArrayBlockingQueue
+LinkedBlockingQueue
