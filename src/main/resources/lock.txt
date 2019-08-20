@@ -17,7 +17,75 @@
 AbstractQueuedSynchronizer  unSupportOperationException  Node(waitStatus,pre,next,Thread,nextWait)  模板设计模式
 基础并发组件  构建同步队列和控制同步状态
 waitStatus 1 CANCELLED 0 初始化 -1 SIGNAL -2 CONDITION -3 PROPAGATE
-ReentrantLock Sync  FairSync  NonFairSync
-semaphore
+ReentrantLock(可重入自旋独占锁) Sync  FairSync  NonFairSync
+lock lockInterruptibly tryLock unlock
+head tail state  双向队列
+lock
+CAS 操作同步状态
+判断同步状态state是否为0 非公平锁 CAS尝试获取   公平锁 在判断同步队列为空 CAS 尝试获取锁
+判断获取的线程跟当前共享资源线程是否一致
+加入同步队列中  初始化head和tail  将节点放到tail上
+判断先驱节点是否是head节点
+不是通过LockSupport.park()当前线程
+是 自旋尝试获取锁
+
+unlock
+修改state共享状态 若修改完为0 则是通过LockSupport.unPark(Thread)  unPark的线程是当前唤醒同步队列中最前边未放弃线程
+
+
+ConditionObject
+await await(nanotime) await(long,TimeUnit) await(date) signal signall()
+firstWait lastWaiter 队列
+await
+新建条件队列wait节点
+释放当前同步状态
+死循环判断节点是否在同步队列中  不在LockSupport.park()  等待唤醒    唤醒后就acquireQueued
+
+signal
+判断当前线程是否持有独占锁，没有就抛异常。
+唤醒等待队列的第一个结点,然后重新维护条件条件队列的firstWaiter和lastWaiter的指向。
+是将从条件队列移除的结点加入同步队列(在transferForSignal()方法中完成的)
+如果进入到同步队列失败并且条件队列还有不为空的节点，则继续循环唤醒后续其他结点的线程。
+
 ArrayBlockingQueue
+添加
+offer(V v) 不阻塞 true false
+offer(V v,Long time,TimeUnit unit) 阻塞指定时间  true false interrupt
+put(V v) 一直阻塞  true interrupt
+add(V v)  不阻塞 true throw Exception
+删除
+poll()  不阻塞 V null
+poll(Long time,TimeUnit unit) 阻塞指定时间  V null interrupt
+take() 一直阻塞  V interrupt
+remove() 不阻塞 true throw Exception
+remover(V v) 不阻塞  true false
+查看
+Element()  查看队列头部元素  无数据则抛异常
+peek()     查看队列头部元素  返回null
+Object[] items 存放的数据
+int takeIndex(下一次获取的索引)
+int putIndex(下一次存放的索引)
+int count   当前数据的大小
+ReentrantLock lock   可重入锁
+Condition notEmpty  非空条件队列
+Condition notFull   非满条件队列
+放入
+不阻塞 判断count 如果为items.length 则返回false 不是enqueue入列返回true
+阻塞
+while(count==items.length)
+        notFull.await()
+    enqueue(v)
+拿出
+不阻塞 判断count 如果为0 则返回null 不是Dequeue出列列返回元素
+阻塞
+while(count==0)
+        notEmpty.await()
+    dequeue()
+remove(V v) 删除指定元素 要重 takeIndex和putIndex循环找到元素后移除数组 然后删除的索引后面的数据往前移动一位
+
 LinkedBlockingQueue
+semaphore
+
+
+
+

@@ -4,12 +4,35 @@ import org.junit.Test;
 import sun.misc.Unsafe;
 
 
-import javax.annotation.concurrent.ThreadSafe;
+import java.lang.reflect.Field;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class LockTest {
+
+
+    /**
+     * 其一，从getUnsafe方法的使用限制条件出发，通过Java命令行命令-Xbootclasspath/a
+     * 把调用Unsafe相关方法的类A所在jar包路径追加到默认的bootstrap路径中，
+     * 使得A被引导类加载器加载，从而通过Unsafe.getUnsafe方法安全的获取Unsafe实例。
+     * java -Xbootclasspath/a: ${path}   // 其中path为调用Unsafe相关方法的类所在jar包路径
+     * 其二，通过反射获取单例对象theUnsafe。
+     */
+    @Test
+    public void testUnsafe() throws NoSuchFieldException, IllegalAccessException {
+        //  Unsafe unsafe = Unsafe.getUnsafe(); //java.lang.SecurityException: Unsafe
+        Field field = Unsafe.class.getDeclaredField("theUnsafe");
+        field.setAccessible(true);
+        Unsafe unsafe = (Unsafe) field.get(null);
+        AtomicInteger atomicInteger = new AtomicInteger(1);
+        Field value = AtomicInteger.class.getDeclaredField("value");
+        long valueOffset = unsafe.objectFieldOffset(value);//获取AtomicInteger对象中value值的内存偏移量
+        int intVolatile = unsafe.getIntVolatile(atomicInteger, valueOffset);//直接访问内存地址获取数据
+        System.out.println(intVolatile);
+        System.out.println(unsafe.compareAndSwapInt(atomicInteger, valueOffset, 1, 10));//CAS算法
+        System.out.println(atomicInteger);
+    }
 
 
     /**
