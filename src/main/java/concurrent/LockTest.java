@@ -13,10 +13,14 @@ public class LockTest {
 
 
     /**
+     * https://tech.meituan.com/2019/02/14/talk-about-java-magic-class-unsafe.html
      * 其一，从getUnsafe方法的使用限制条件出发，通过Java命令行命令-Xbootclasspath/a
      * 把调用Unsafe相关方法的类A所在jar包路径追加到默认的bootstrap路径中，
      * 使得A被引导类加载器加载，从而通过Unsafe.getUnsafe方法安全的获取Unsafe实例。
      * java -Xbootclasspath/a: ${path}   // 其中path为调用Unsafe相关方法的类所在jar包路径
+     * -Xbootclasspath:   完全取代基本核心的Java class 搜索路径.不常用,否则要重新写所有Java 核心class
+     * -Xbootclasspath/a: 后缀在核心class搜索路径后面.常用!!
+     * -Xbootclasspath/p: 前缀在核心class搜索路径前面.不常用,避免引起不必要的冲突.
      * 其二，通过反射获取单例对象theUnsafe。
      */
     @Test
@@ -36,10 +40,13 @@ public class LockTest {
 
 
     /**
-     * https://tech.meituan.com/2019/02/14/talk-about-java-magic-class-unsafe.html
+     *
      *
      * @throws NoSuchFieldException
      */
+
+
+
     @Test
     public void lock() throws NoSuchFieldException {
         //悲观锁
