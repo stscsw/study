@@ -5,6 +5,8 @@ import sun.misc.Unsafe;
 
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
@@ -164,6 +166,31 @@ public class LockTest {
         System.out.println(queue.offer(3) + " ");
         System.out.println(queue.take() + " ");
         System.out.println(queue.size());
+    }
+
+    //java8
+    //remove(key,value) 存在key和对应的value删除
+    //replace(key,newValue) key值存在就有新value替换
+    //replace(key,oldValue,newValue) key值和对应value一样才做替换
+    //computeIfAbsent(key,Function<K,V>)    如果key值不存在就插入
+    //computeIfPresent(key,BiFuncation<k,V,V>) 如果key值存在根据key和value创建新value
+    //merge(K key, V value,BiFunction<? super V, ? super V, ? extends V> remappingFunction)
+    //1.value 抛异常
+    //2.key不存在 按照value设置
+    //3.key值存在 按照新旧value设置
+    @Test
+    public void test1(){
+        Map<String,String> map = new HashMap<>();
+        map.put("a","aa");
+        map.put("b","bb");
+        map.put("c","cc");
+        map.computeIfAbsent("d",(v) -> "aaa");
+        map.computeIfPresent("a",(a,v) -> {
+            System.out.println(a);
+            System.out.println(v);
+            return "yyy";
+        });
+        System.out.println(map);
     }
 
 
