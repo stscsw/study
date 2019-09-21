@@ -1,18 +1,21 @@
 package concurrent;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 import org.junit.Test;
 import sun.misc.Unsafe;
+import util.DateUtil;
 
 
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.IntStream;
 
 public class LockTest {
 
@@ -45,11 +48,8 @@ public class LockTest {
 
 
     /**
-     *
-     *
      * @throws NoSuchFieldException
      */
-
 
 
     @Test
@@ -182,19 +182,18 @@ public class LockTest {
     //2.key不存在 按照value设置
     //3.key值存在 按照新旧value设置
     @Test
-    public void test1(){
-        Map<String,String> map = new HashMap<>();
-        map.put("a","aa");
-        map.put("b","bb");
-        map.put("c","cc");
-        map.computeIfAbsent("d",(v) -> "aaa");
-        map.computeIfPresent("a",(a,v) -> {
+    public void test1() {
+        Map<String, String> map = new HashMap<>();
+        map.put("a", "aa");
+        map.put("b", "bb");
+        map.put("c", "cc");
+        map.computeIfAbsent("d", (v) -> "aaa");
+        map.computeIfPresent("a", (a, v) -> {
             System.out.println(a);
             System.out.println(v);
             return "yyy";
         });
         System.out.println(map);
     }
-
 
 }
