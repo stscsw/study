@@ -1,6 +1,11 @@
 package concurrent;
 import java.util.concurrent.*;
 
+/**
+ * CallAble Runnable 有返回值和可以抛异常
+ * RunnableFuture  extends  Runnable,Future
+ * FutureTask  implements  RunnableFuture
+ */
 public class CallAbleTest {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
