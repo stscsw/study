@@ -8,6 +8,8 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * ReadWriteLock:读写锁
  * 写写/写读  需要排斥
  * 读读      可以一起执行
+ * Synchronized 作用在方法级别的时候根据方法签名锁对象不同
+ * 静态方法锁对象为类  实例方法锁对象为实例
  */
 public class ReadWriteLockDemo {
 
