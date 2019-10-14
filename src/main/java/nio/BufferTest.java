@@ -15,8 +15,6 @@ import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CharsetEncoder;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.util.ArrayList;
-import java.util.List;
 
 public class BufferTest {
 
@@ -90,8 +88,10 @@ public class BufferTest {
     }
 
     /**
+     * 用户地址空间  内核地址空间
+     *
      * 非直接缓冲区：通过allocate()方法分配缓冲区，将缓冲区建立在JVM内存中
-     * 直接缓冲区：通过allocateDirect()方法分配直接缓冲区，将缓冲区建立在物理内存中 （内存映射文件）
+     * 直接缓冲区：通过allocateDirect()方法分配直接缓冲区，将缓冲区建立在物理内存中 （物理内存映射文件）
      */
     @Test
     public void isDirect() {

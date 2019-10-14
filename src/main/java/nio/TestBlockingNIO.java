@@ -80,4 +80,47 @@ public class TestBlockingNIO {
 
     }
 
+
+    @Test
+    public void server2() throws IOException {
+        ServerSocketChannel ssChannel = ServerSocketChannel.open();
+        ssChannel.bind(new InetSocketAddress(8989));
+
+        SocketChannel sChannel = ssChannel.accept();
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+
+        while (sChannel.read(byteBuffer) != -1) {
+            byteBuffer.flip();
+            System.out.println(new String(byteBuffer.array(), 0, byteBuffer.limit()));
+            byteBuffer.clear();
+        }
+
+        byteBuffer.put("服务器端已经收到客户端请求".getBytes());
+        byteBuffer.flip();
+        sChannel.write(byteBuffer);
+        byteBuffer.clear();
+
+        sChannel.close();
+        ssChannel.close();
+
+    }
+
+    @Test
+    public void client2() throws IOException {
+        SocketChannel sChannel = SocketChannel.open(new InetSocketAddress("127.0.0.1", 8989));
+        ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
+        byteBuffer.put("我是客户端".getBytes());
+        byteBuffer.flip();
+        sChannel.write(byteBuffer);
+
+        sChannel.shutdownOutput();
+
+        byteBuffer.clear();
+        sChannel.read(byteBuffer);
+        byteBuffer.flip();
+        System.out.println(new String(byteBuffer.array(), 0, byteBuffer.limit()));
+
+
+    }
+
 }
