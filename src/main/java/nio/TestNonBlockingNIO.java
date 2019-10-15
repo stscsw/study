@@ -6,50 +6,12 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.*;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Scanner;
 
 //NIO 非阻塞方式
 public class TestNonBlockingNIO {
-
-    @Test
-    public void server() throws IOException {
-
-        ServerSocketChannel ssChannel = ServerSocketChannel.open();
-
-        ssChannel.configureBlocking(false);
-
-        ssChannel.bind(new InetSocketAddress(8989));
-
-        Selector selector = Selector.open();
-
-        ssChannel.register(selector, SelectionKey.OP_ACCEPT);
-
-        while (selector.select() > 0) {
-            Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
-           while (iterator.hasNext()) {
-                SelectionKey selectionKey = iterator.next();
-                if (selectionKey.isAcceptable()) {
-                    SocketChannel sChannel = ssChannel.accept();
-                    sChannel.configureBlocking(false);
-                    sChannel.register(selector, SelectionKey.OP_READ);
-                } else if (selectionKey.isReadable()) {
-                    SocketChannel sChannel = (SocketChannel) selectionKey.channel();
-                    ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
-                    int len = 0;
-                    while ((len = sChannel.read(byteBuffer)) > 0) {
-                        byteBuffer.flip();
-                        System.out.println(new String(byteBuffer.array(), 0, len));
-                        byteBuffer.clear();
-                    }
-                }
-                iterator.remove();
-            }
-        }
-    }
 
 
     //客户端
@@ -75,7 +37,7 @@ public class TestNonBlockingNIO {
 
     //服务端
     @Test
-    public void server2() throws IOException {
+    public void server() throws IOException {
         //1. 获取通道
         ServerSocketChannel ssChannel = ServerSocketChannel.open();
         //2. 切换非阻塞模式
